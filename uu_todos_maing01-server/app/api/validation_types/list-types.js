@@ -8,3 +8,15 @@ const listCreateDtoInType = shape({
   const listGetDtoInType = shape({
     id: id().isRequired()
   })
+
+  const listUpdateDtoInType = shape({
+    id: id().isRequired(),
+    name: string(1,30),
+    description: uu5String(),
+    deadline: date()
+  })
+
+  const listDeleteDtoInType = shape({
+    id: id().isRequired(),
+    forceDelete: boolean()
+  });

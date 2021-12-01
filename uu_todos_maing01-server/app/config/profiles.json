@@ -23,7 +23,19 @@
       },
       "list/get": {
         "sysStateList": ["active"],
-        "profileList": ["Authorities","Executives", "Readers"]
+        "profileList": ["Authorities","Executives","Readers"]
+      },
+      "list/update": {
+        "sysStateList": ["active"],
+        "profileList": ["Authorities","Executives"]
+      },
+      "list/delete": {
+        "sysStateList": ["active"],
+        "profileList": ["Authorities","Executives"]
+      },
+      "item/create": {
+        "sysStateList": ["active"],
+        "profileList": []
       }
     }
   }

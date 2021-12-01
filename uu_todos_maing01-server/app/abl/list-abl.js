@@ -12,6 +12,9 @@ const WARNINGS = {
   getUnsupportedKeys: {
     code: `${Errors.Get.UC_CODE}unsupportedKeys`,
   },
+  updateUnsupportedKeys: {
+    code: `${Errors.Update.UC_CODE}unsupportedKeys`,
+  },
 
 };
 
@@ -20,6 +23,10 @@ class ListAbl {
     this.validator = Validator.load();
     this.mainDao = DaoFactory.getDao('todoInstance')
     this.dao = DaoFactory.getDao("list");
+  }
+
+  async delete(awid, dtoIn) {
+    
   }
 
   async create(awid, dtoIn, uuAppErrorMap) {
@@ -38,7 +45,7 @@ class ListAbl {
         throw new Errors.Create.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
     }
 
-    if (uuTodos?.state !== 'active') {
+    if (uuTodos.state !== 'active') {
       throw new Errors.Create.TodoInstanceIsNotInProperState({uuAppErrorMap},
          {awid, currentState: uuTodos.state, expectedState: "active" })
     }
@@ -85,7 +92,7 @@ class ListAbl {
         throw new Errors.Get.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
     }
 
-    if (uuTodos?.state !== 'active') {
+    if (uuTodos && uuTodos.state !== 'active') {
       throw new Errors.Get.TodoInstanceIsNotInProperState({uuAppErrorMap},
          {awid, currentState: uuTodos.state, expectedState: "active" })
     }
@@ -102,7 +109,58 @@ class ListAbl {
         uuAppErrorMap
     }
   }
-  
+  async update(awid, dtoIn, uuAppErrorMap) {
+    // HDS 1 
+    const validationResult = this.validator.validate("listUpdateDtoInType", dtoIn);
+    uuAppErrorMap = ValidationHelper.processValidationResult(
+        dtoIn,
+        validationResult,
+        WARNINGS.createUnsupportedKeys.code,
+        Errors.Update.InvalidDtoIn
+    );
+
+    // HDS 2 
+    const uuTodos = await this.mainDao.getByAwid(awid)
+    if(!uuTodos){
+        throw new Errors.Update.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
+    }
+
+    if (uuTodos.state !== 'active') {
+      throw new Errors.Update.TodoInstanceIsNotInProperState({uuAppErrorMap},
+         {awid, currentState: uuTodos.state, expectedState: "active" })
+    }
+
+    // HDS 3
+    
+    if(dtoIn.deadline){
+      const inputDate = new Date(dtoIn.deadline);
+        const currentDate = new Date();
+        if(inputDate.getTime() < currentDate.getTime()){
+          throw new Errors.Update.DeadlineDateIsFromThePast({ uuAppErrorMap }, { deadline: dtoIn.deadline });
+        }
+    }
+
+    // HDS 4 
+    const uuObject= { ...dtoIn, awid};
+    // find
+    const uuFindTodo = await this.dao.get(awid, dtoIn.id);
+    if(!uuFindTodo){
+      throw new Errors.Get.ListDoesNotExist({ uuAppErrorMap },{team: dtoIn.id})
+    }
+    // update
+    let uuTodo = null;
+    try {
+      uuTodo =  await this.dao.update(uuObject);
+    } catch (err) {
+      throw new Errors.Update.ListDaoUpdateFailed({ uuAppErrorMap }, err);
+    }
+
+  //  HDS 5 
+    return {
+      ...uuTodo,
+      uuAppErrorMap,
+    };
+  }
 }
 
 module.exports = new ListAbl();

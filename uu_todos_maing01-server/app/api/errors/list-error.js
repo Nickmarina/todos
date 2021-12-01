@@ -70,18 +70,94 @@ const Get = {
     }
   },
 
-  listDoesNotExist: class extends TodosMainUseCaseError {
+  ListDoesNotExist: class extends TodosMainUseCaseError {
     constructor() {
       super(...arguments);
       this.code = `${Get.UC_CODE}itemDoesNotExist`;
       this.message = "List with given id does not exist.";
     }
   },
+};
+
+const Update = {
+  UC_CODE: `${LIST_ERROR_PREFIX}get/`,
+  InvalidDtoIn: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}invalidDtoIn`;
+      this.message = "DtoIn is not valid.";
+    }
+  },
+  TodoInstanceDoesNotExist: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}todoInstanceDoesNotExist`;
+      this.message = "TodoInstance does not exist.";
+    }
+  },
+  TodoInstanceIsNotInProperState: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}todoInstanceIsNotInProperState`;
+      this.message = "The application is not in proper state.";
+    }
+  },
+
+  ListDaoUpdateFailed: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}itemDoesNotExist`;
+      this.message = "Update list by list DAO update failed.";
+    }
+  },
+
+  DeadlineDateIsFromThePast: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}deadlineDateIsFromThePast`;
+      this.message = "Deadline date is from the past and therefore cannot be met.";
+    }
+  },
+
  
-  
+};
+
+const Delete = {
+  UC_CODE: `${LIST_ERROR_PREFIX}delete/`,
+  InvalidDtoIn: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}invalidDtoIn`;
+      this.message = "DtoIn is not valid.";
+    }
+  },
+  TodoInstanceDoesNotExist: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}todoInstanceDoesNotExist`;
+      this.message = "TodoInstance does not exist.";
+    }
+  },
+  TodoInstanceIsNotInProperState: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}todoInstanceIsNotInProperState`;
+      this.message = "The application is not in proper state.";
+    }
+  },
+
+  ListContainsActiveItems: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}listContainsActiveItems`;
+      this.message = "List with active items can not be deleted.";
+    }
+  },
 };
 
 module.exports = {
+  Delete,
   Create,
-  Get
+  Get,
+  Update
 };
