@@ -28,8 +28,14 @@ class ItemMongo extends UuObjectDao {
     return await super.findOneAndUpdate(filter, uuObject, "NONE");
   }
 
-//   setFinalState(awid, id, state)->uuObject
-
+  async setFinalState(awid, id, state){
+    const filter = {
+      awid,
+      id,
+    }
+    return await super.findOneAndUpdate(filter, {state}, "NONE");
+  }
+  
   async delete(awid, id){
     let filter = {
       awid,

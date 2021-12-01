@@ -14,6 +14,9 @@ const WARNINGS = {
   },
   updateUnsupportedKeys: {
     code: `${Errors.Create.UC_CODE}unsupportedKeys`,
+  },
+  setFinalStateUnsupportedKeys: {
+    code: `${Errors.Create.UC_CODE}unsupportedKeys`,
   }
 };
 
@@ -24,6 +27,48 @@ class ItemAbl {
     this.mainDao = DaoFactory.getDao('todoInstance')
     this.listDao = DaoFactory.getDao('list')
     this.dao = DaoFactory.getDao("item");
+  }
+
+  async setFinalState(awid, dtoIn, uuAppErrorMap) {
+
+     // HDS 1
+     const validationResult = this.validator.validate("itemSetFinalStateDtoInType", dtoIn);
+     uuAppErrorMap = ValidationHelper.processValidationResult(
+         dtoIn,
+         validationResult,
+         WARNINGS.setFinalStateUnsupportedKeys.code,
+         Errors.SetFinalState.InvalidDtoIn
+     );
+
+     // HDS 2 
+     const todoInstance = await this.mainDao.getByAwid(awid)
+     if(!todoInstance){
+         throw new Errors.SetFinalState.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
+     }
+
+     if (todoInstance.state !== 'active') {
+       throw new Errors.SetFinalState.TodoInstanceIsNotInProperState({uuAppErrorMap},
+         {awid, currentState: todoInstance.state, expectedState: "active" })
+   }
+
+    //  HDS 3
+    const item = await this.dao.get(awid, dtoIn.id)
+     if(!item){
+         throw new Errors.SetFinalState.ItemDoesNotExist({ uuAppErrorMap },{item: dtoIn.id})
+     }
+     if (item.state !== 'active') {
+       throw new Errors.SetFinalState.ItemIsNotInProperState({uuAppErrorMap},
+         {awid, currentState: item.state, expectedState: "active" })
+     }
+    
+    //  HDS 4
+     const updatedItem = await this.dao.setFinalState(awid, dtoIn.id, dtoIn.state)
+
+    //  HDS 5 
+    return {
+      ...updatedItem,
+      uuAppErrorMap
+    }
   }
 
   async update(awid, dtoIn, uuAppErrorMap) {

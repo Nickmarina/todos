@@ -15,3 +15,8 @@ const itemUpdateDtoInType = shape({
   text: string(1,1000),
   highPriority: boolean()
 })
+
+const itemSetFinalStateDtoInType = shape({
+  id: id().isRequired(),
+  state: oneOf(["completed", "cancelled"]).isRequired()
+})
