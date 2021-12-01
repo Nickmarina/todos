@@ -4,3 +4,7 @@ const listCreateDtoInType = shape({
     description: uu5String(4000),
     deadline: date()
   })
+
+  const listGetDtoInType = shape({
+    id: id().isRequired()
+  })

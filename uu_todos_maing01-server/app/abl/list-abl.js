@@ -9,6 +9,10 @@ const WARNINGS = {
   createUnsupportedKeys: {
     code: `${Errors.Create.UC_CODE}unsupportedKeys`,
   },
+  getUnsupportedKeys: {
+    code: `${Errors.Get.UC_CODE}unsupportedKeys`,
+  },
+
 };
 
 class ListAbl {
@@ -65,6 +69,40 @@ class ListAbl {
     }
   }
 
+  async get(awid, dtoIn, uuAppErrorMap) {
+    // HDS 1
+    const validationResult = this.validator.validate("listGetDtoInType", dtoIn);
+    uuAppErrorMap = ValidationHelper.processValidationResult(
+        dtoIn,
+        validationResult,
+        WARNINGS.createUnsupportedKeys.code,
+        Errors.Get.InvalidDtoIn
+    );
+
+    // HDS 2
+    const uuTodos = await this.mainDao.getByAwid(awid)
+    if(!uuTodos){
+        throw new Errors.Get.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
+    }
+
+    if (uuTodos?.state !== 'active') {
+      throw new Errors.Get.TodoInstanceIsNotInProperState({uuAppErrorMap},
+         {awid, currentState: uuTodos.state, expectedState: "active" })
+    }
+
+    // HDS 3
+    const uuTodo = await this.dao.get(awid, dtoIn.id)
+    if(!uuTodo){
+        throw new Errors.Get.ListDoesNotExist({ uuAppErrorMap },{todo: dtoIn.id})
+    }
+
+    // HDS 4
+    return {
+        ...uuTodo,
+        uuAppErrorMap
+    }
+  }
+  
 }
 
 module.exports = new ListAbl();

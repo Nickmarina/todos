@@ -20,6 +20,10 @@
       "list/create": {
         "sysStateList": ["active"],
         "profileList": ["Authorities","Executives"]
+      },
+      "list/get": {
+        "sysStateList": ["active"],
+        "profileList": ["Authorities","Executives", "Readers"]
       }
     }
   }

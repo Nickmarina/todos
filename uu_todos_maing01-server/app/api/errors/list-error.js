@@ -46,6 +46,42 @@ const Create = {
   
 };
 
+const Get = {
+  UC_CODE: `${LIST_ERROR_PREFIX}get/`,
+  InvalidDtoIn: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Get.UC_CODE}invalidDtoIn`;
+      this.message = "DtoIn is not valid.";
+    }
+  },
+  TodoInstanceDoesNotExist: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Get.UC_CODE}todoInstanceDoesNotExist`;
+      this.message = "TodoInstance does not exist.";
+    }
+  },
+  TodoInstanceIsNotInProperState: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Get.UC_CODE}todoInstanceIsNotInProperState`;
+      this.message = "The application is not in proper state.";
+    }
+  },
+
+  listDoesNotExist: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Get.UC_CODE}itemDoesNotExist`;
+      this.message = "List with given id does not exist.";
+    }
+  },
+ 
+  
+};
+
 module.exports = {
-  Create
+  Create,
+  Get
 };
