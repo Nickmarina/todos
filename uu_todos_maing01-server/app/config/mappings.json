@@ -31,13 +31,23 @@
         "httpMethod": "POST",
         "type": "CMD"
       },
+      "list/delete": {
+        "realization": "api/controllers/ListController.delete",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
       "item/create": {
         "realization": "api/controllers/ItemController.create",
         "httpMethod": "POST",
         "type": "CMD"
       },
-      "list/delete": {
-        "realization": "api/controllers/ListController.delete",
+      "item/get": {
+        "realization": "api/controllers/ItemController.get",
+        "httpMethod": "GET",
+        "type": "CMD"
+      },
+      "item/update": {
+        "realization": "api/controllers/ItemController.update",
         "httpMethod": "POST",
         "type": "CMD"
       }

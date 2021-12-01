@@ -82,7 +82,7 @@ class ListAbl {
     uuAppErrorMap = ValidationHelper.processValidationResult(
         dtoIn,
         validationResult,
-        WARNINGS.createUnsupportedKeys.code,
+        WARNINGS.getUnsupportedKeys.code,
         Errors.Get.InvalidDtoIn
     );
 
@@ -115,7 +115,7 @@ class ListAbl {
     uuAppErrorMap = ValidationHelper.processValidationResult(
         dtoIn,
         validationResult,
-        WARNINGS.createUnsupportedKeys.code,
+        WARNINGS.updateUnsupportedKeys.code,
         Errors.Update.InvalidDtoIn
     );
 
@@ -143,9 +143,9 @@ class ListAbl {
     // HDS 4 
     const uuObject= { ...dtoIn, awid};
     // find
-    const uuFindTodo = await this.dao.get(awid, dtoIn.id);
+    const uuFindTodo = await this.dao.get(awid, uuObject.id);
     if(!uuFindTodo){
-      throw new Errors.Get.ListDoesNotExist({ uuAppErrorMap },{team: dtoIn.id})
+      throw new Errors.Get.ListDoesNotExist({ uuAppErrorMap },{todo: uuObject.id})
     }
     // update
     let uuTodo = null;

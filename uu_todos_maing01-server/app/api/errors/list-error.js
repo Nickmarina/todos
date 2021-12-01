@@ -73,7 +73,7 @@ const Get = {
   ListDoesNotExist: class extends TodosMainUseCaseError {
     constructor() {
       super(...arguments);
-      this.code = `${Get.UC_CODE}itemDoesNotExist`;
+      this.code = `${Get.UC_CODE}listDoesNotExist`;
       this.message = "List with given id does not exist.";
     }
   },
