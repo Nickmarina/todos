@@ -17,6 +17,9 @@ const WARNINGS = {
   },
   deleteUnsupportedKeys: {
     code: `${Errors.Delete.UC_CODE}unsupportedKeys`,
+  },
+  listUnsupportedKeys: {
+    code: `${Errors.List.UC_CODE}unsupportedKeys`,
   }
 };
 
@@ -27,6 +30,44 @@ class ListAbl {
     this.dao = DaoFactory.getDao("list");
     this.itemDao = DaoFactory.getDao("item")
   }
+
+  async list(awid, dtoIn, uuAppErrorMap) {
+    // HDS 1
+    const validationResult = this.validator.validate("listListDtoInType", dtoIn);
+    uuAppErrorMap = ValidationHelper.processValidationResult(
+        dtoIn,
+        validationResult,
+        WARNINGS.listUnsupportedKeys.code,
+        Errors.List.InvalidDtoIn
+    ); 
+    
+    let uuObject = {...dtoIn, awid}
+    if(!uuObject.pageInfo.pageIndex)uuObject.pageInfo.pageIndex = 0
+    if(!uuObject.pageInfo.pageSize)uuObject.pageInfo.pageSize
+    const pageInfo = {pageIndex: uuObject.pageInfo.pageIndex, pageSize: uuObject.pageInfo.pageSize}
+    if(!uuObject.pageInfo) uuObject.pageInfo = pageInfo
+ 
+    // HDS 2
+    const  todoInstance = await this.mainDao.getByAwid(uuObject.awid)
+    if(!todoInstance){
+        throw new Errors.List.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid: uuObject.awid})
+    }
+    if ( todoInstance.state !== 'active') {
+      throw new Errors.List.TodoInstanceIsNotInProperState({uuAppErrorMap},
+         {awid: uuObject.awid, currentState:  todoInstance.state, expectedState: "active" })
+    }
+
+    // HDS 3
+    const  itemList = await this.dao.list(uuObject.awid, pageInfo)
+
+    // HDS 4
+    return{
+      ...itemList,
+      pageInfo,
+      uuAppErrorMap
+    }
+  }
+  
 
   async delete(awid, dtoIn, uuAppErrorMap) {
     // HDS 1
@@ -60,11 +101,10 @@ class ListAbl {
 
     // HDS 4 
     let items = await this.itemDao.listByListId(uuObject.awid ,uuObject.id, 0)
-    console.log(items)
+    // console.log(items)
     if(items.itemList.length>0&&uuObject.forceDelete === false){
       throw new Errors.Delete.ListContainsActiveItems({uuAppErrorMap}, {id: uuObject.id, itemList: items})
     }
-    console.log(items)
 
     // HDS 5
     if(items) {

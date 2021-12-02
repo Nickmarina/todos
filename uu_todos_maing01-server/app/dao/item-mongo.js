@@ -42,11 +42,7 @@ class ItemMongo extends UuObjectDao {
     };
     return await super.deleteOne(filter);
   }
-//   deleteManyByListId(awid, listId) -> void
 
-  // async list (awid, pageInfo){
-  //     return await super.find({awid}, pageInfo);
-  // }
    async list (awid, pageInfo){
       return await super.find({awid}, pageInfo);
   }

@@ -52,6 +52,8 @@ class ItemAbl {
     let uuObject = {...dtoIn, awid}
     if(!uuObject.pageIndex) uuObject.pageIndex = 0
     if(!uuObject.pageSize) uuObject.pageSize = 1000
+    const pageInfo = {pageIndex: uuObject.pageIndex, pageSize: uuObject.pageSize}
+    if(!uuObject.pageInfo) uuObject.pageInfo = pageInfo
 
     // HDS 2
     const todoInstance = await this.mainDao.getByAwid(uuObject.awid)
@@ -65,6 +67,7 @@ class ItemAbl {
     }
 
     // HDS 3
+
 
     let list = null;
     if(uuObject.listId&&uuObject.state){  
