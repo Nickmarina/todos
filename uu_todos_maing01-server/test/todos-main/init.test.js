@@ -16,6 +16,8 @@ describe("Testing the init uuCmd...", () => {
 
     let dtoIn = {
       uuAppProfileAuthorities: "urn:uu:GGALL",
+      code: "test",
+      name:"test"
     };
     let result = await TestHelper.executePostCommand("sys/uuAppWorkspace/init", dtoIn, session);
 

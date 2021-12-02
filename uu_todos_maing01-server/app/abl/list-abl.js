@@ -138,7 +138,7 @@ class ListAbl {
         throw new Errors.Create.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
     }
 
-    if (uuTodos.state !== 'active') {
+    if (uuTodos&&uuTodos.state !== 'active') {
       throw new Errors.Create.TodoInstanceIsNotInProperState({uuAppErrorMap},
          {awid, currentState: uuTodos.state, expectedState: "active" })
     }
