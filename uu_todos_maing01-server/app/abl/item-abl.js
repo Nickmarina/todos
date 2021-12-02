@@ -10,14 +10,22 @@ const WARNINGS = {
     code: `${Errors.Create.UC_CODE}unsupportedKeys`,
   },
   getUnsupportedKeys: {
-    code: `${Errors.Create.UC_CODE}unsupportedKeys`,
+    code: `${Errors.Get.UC_CODE}unsupportedKeys`,
   },
   updateUnsupportedKeys: {
-    code: `${Errors.Create.UC_CODE}unsupportedKeys`,
+    code: `${Errors.Update.UC_CODE}unsupportedKeys`,
   },
   setFinalStateUnsupportedKeys: {
-    code: `${Errors.Create.UC_CODE}unsupportedKeys`,
-  }
+    code: `${Errors.SetFinalState.UC_CODE}unsupportedKeys`,
+  },
+  deleteUnsupportedKeys: {
+    code: `${Errors.Delete.UC_CODE}unsupportedKeys`,
+  },
+  itemDoesNotExist: {
+    code: `${Errors.Delete.UC_CODE}	itemDoesNotExist`,
+    message: 'Item with given id does not exist.'
+  },
+
 };
 
 class ItemAbl {
@@ -27,6 +35,54 @@ class ItemAbl {
     this.mainDao = DaoFactory.getDao('todoInstance')
     this.listDao = DaoFactory.getDao('list')
     this.dao = DaoFactory.getDao("item");
+  }
+
+  async delete(awid, dtoIn, uuAppErrorMap) {
+     // HDS 1
+     const validationResult = this.validator.validate("itemDeleteDtoInType", dtoIn);
+     uuAppErrorMap = ValidationHelper.processValidationResult(
+         dtoIn,
+         validationResult,
+         WARNINGS.deleteUnsupportedKeys.code,
+         Errors.Delete.InvalidDtoIn
+     );  
+
+     
+     // HDS 2 
+     const todoInstance = await this.mainDao.getByAwid(awid)
+     if(!todoInstance){
+         throw new Errors.Delete.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
+     }
+
+     if (todoInstance.state !== 'active') {
+       throw new Errors.Delete.TodoInstanceIsNotInProperState({uuAppErrorMap},
+         {awid, currentState: todoInstance.state, expectedState: "active" })
+   }
+
+    //  HDS 3
+
+    const item = await this.dao.get(awid, dtoIn.id)
+    
+    if(!item){
+      ValidationHelper.addWarning(
+        uuAppErrorMap,
+        WARNINGS.itemDoesNotExist.code,
+        WARNINGS.itemDoesNotExist.message,
+        { item: dtoIn.id }
+      );
+    }
+    if (item&&item.state==="completed"){
+      throw new Errors.Delete.ItemIsNotInCorectState({uuAppErrorMap},
+         {id:dtoIn.id, state: item.state, expectedStateList:  ["active", "cancelled"]})
+    }
+
+    // HDS 4 
+    if(item) await this.dao.delete(awid, dtoIn.id)
+
+    // HDS 5
+    return {
+      uuAppErrorMap
+    }
   }
 
   async setFinalState(awid, dtoIn, uuAppErrorMap) {

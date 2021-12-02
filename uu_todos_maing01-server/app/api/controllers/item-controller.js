@@ -3,6 +3,10 @@ const ItemAbl = require("../../abl/item-abl.js");
 
 class ItemController {
 
+  delete(ucEnv) {
+    return ItemAbl.delete(ucEnv.getUri().getAwid(), ucEnv.getDtoIn());
+  }
+
   setFinalState(ucEnv) {
     return ItemAbl.setFinalState(ucEnv.getUri().getAwid(), ucEnv.getDtoIn());
   }

@@ -16,7 +16,7 @@ const WARNINGS = {
     code: `${Errors.Update.UC_CODE}unsupportedKeys`,
   },
   deleteUnsupportedKeys: {
-    code: `${Errors.Update.UC_CODE}unsupportedKeys`,
+    code: `${Errors.Delete.UC_CODE}unsupportedKeys`,
   },
   // listDoesNotExist: {
   //   code: `${Errors.Update.UC_CODE}unsupportedKeys`,

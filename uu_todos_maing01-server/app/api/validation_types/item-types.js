@@ -20,3 +20,7 @@ const itemSetFinalStateDtoInType = shape({
   id: id().isRequired(),
   state: oneOf(["completed", "cancelled"]).isRequired()
 })
+
+const itemDeleteDtoInType = shape({
+  id: id().isRequired()
+})

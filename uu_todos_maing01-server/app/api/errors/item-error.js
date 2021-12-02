@@ -168,7 +168,48 @@ const SetFinalState = {
   },
 };
 
+const Delete = {
+  UC_CODE: `${ITEM_ERROR_PREFIX}delete/`,
+  InvalidDtoIn: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}invalidDtoIn`;
+      this.message = "DtoIn is not valid.";
+    }
+  },
+  TodoInstanceDoesNotExist: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}todoInstanceDoesNotExist`;
+      this.message = "TodoInstance does not exist.";
+    }
+  },
+  TodoInstanceIsNotInProperState: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}todoInstanceIsNotInProperState`;
+      this.message = "The application is not in proper state.";
+    }
+  },
+  // ItemDoesNotExist: class extends TodosMainUseCaseError {
+  //   constructor() {
+  //     super(...arguments);
+  //     this.code = `${Delete.UC_CODE}itemDoesNotExist`;
+  //     this.message = "	Item with given id does not exist.";
+  //   }
+  // },
+  ItemIsNotInCorectState: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}itemIsNotInCorectState`;
+      this.message = "Only active or cancelled items can be deleted.";
+    }
+  },
+  
+};
+
 module.exports = {
+  Delete,
   SetFinalState,
   Update,
   Get,
