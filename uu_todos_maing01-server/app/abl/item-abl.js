@@ -48,12 +48,10 @@ class ItemAbl {
         WARNINGS.listUnsupportedKeys.code,
         Errors.List.InvalidDtoIn
        );  
-    
     let uuObject = {...dtoIn, awid}
-    if(!uuObject.pageIndex) uuObject.pageIndex = 0
-    if(!uuObject.pageSize) uuObject.pageSize = 1000
-    const pageInfo = {pageIndex: uuObject.pageIndex, pageSize: uuObject.pageSize}
-    if(!uuObject.pageInfo) uuObject.pageInfo = pageInfo
+    if(!dtoIn.pageInfo) uuObject.pageInfo ={}
+    if(!uuObject.pageInfo.pageIndex) uuObject.pageInfo.pageIndex= 0
+    if(!uuObject.pageInfo.pageSize) uuObject.pageInfo.pageSize = 1000
 
     // HDS 2
     const todoInstance = await this.mainDao.getByAwid(uuObject.awid)

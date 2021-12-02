@@ -1,10 +1,9 @@
 const { TestHelper } = require("uu_appg01_server-test");
-
-const useCase = "list/update";
-
+const CMD = "item/list";
 afterEach(async () => {
-  await TestHelper.dropDatabase();
-  await TestHelper.teardown();
+    await TestHelper.dropDatabase();
+    await TestHelper.teardown();
+
 })
 
 beforeEach(async () => {
@@ -14,21 +13,37 @@ beforeEach(async () => {
   await TestHelper.initUuAppWorkspace({ "uuAppProfileAuthorities": "urn:uu:GGPLUS4U", "code":"123test", "name":"123test" }) 
 });
 
-
-
-describe(`Testing  the list/update...`, () => {
+describe("Testing the item/list...", () => {
   test("HDS", async () => {
     let session = await TestHelper.login("AwidLicenseOwner", false, false);
-    const dtoIn={
-        name: "updated",
-        description: "updated"
-    }
-    const list = await TestHelper.executePostCommand("list/create", { name:"name"}, session);
-    const result = await TestHelper.executePostCommand("list/update", {id: list.id, ...dtoIn}, session);
+    let result = await TestHelper.executeGetCommand("item/list", { awid: TestHelper.awid}, session)
     expect(result.status).toEqual(200);
     expect(result.data.uuAppErrorMap).toBeDefined();
   });
-
+  test("test if listId&&state", async () => {
+    let session = await TestHelper.login("AwidLicenseOwner", false, false);
+    const list =  await TestHelper.executePostCommand("list/create", {name:"name"}, session)
+    const item = await TestHelper.executePostCommand("item/create", {listId: list.id, text: "test message"}, session);
+    let result = await TestHelper.executeGetCommand("item/list", { awid: TestHelper.awid, dtoIn:{listId: item.listId, state:item.state}}, session)
+    expect(result.status).toEqual(200);
+    expect(result.data.uuAppErrorMap).toBeDefined();
+  });
+  test("test if only state", async () => {
+    let session = await TestHelper.login("AwidLicenseOwner", false, false);
+    const list =  await TestHelper.executePostCommand("list/create", {name:"name"}, session)
+    const item = await TestHelper.executePostCommand("item/create", {listId: list.id, text: "test message"}, session);
+    let result = await TestHelper.executeGetCommand("item/list", { awid: TestHelper.awid, dtoIn:{state:item.state}}, session)
+    expect(result.status).toEqual(200);
+    expect(result.data.uuAppErrorMap).toBeDefined();
+  });
+  test("test if only listId", async () => {
+    let session = await TestHelper.login("AwidLicenseOwner", false, false);
+    const list =  await TestHelper.executePostCommand("list/create", {name:"name"}, session)
+    const item = await TestHelper.executePostCommand("item/create", {listId: list.id, text: "test message"}, session);
+    let result = await TestHelper.executeGetCommand("item/list", { awid: TestHelper.awid, dtoIn:{listId: item.listId}}, session)
+    expect(result.status).toEqual(200);
+    expect(result.data.uuAppErrorMap).toBeDefined();
+    });
   test("TodoInstanceDoesNotExist", async () => {
     let session = await TestHelper.login("Authorities", false, false);
     let filter = `{awid: "${TestHelper.awid}"}`;
@@ -41,8 +56,7 @@ describe(`Testing  the list/update...`, () => {
     };
     expect.assertions(3);
     try {
-      const list = await TestHelper.executePostCommand("list/create", { name:"name"}, session);
-      await TestHelper.executePostCommand("list/update", {id: list.id, ...dtoIn}, session);
+        await TestHelper.executeGetCommand("item/list", { awid: TestHelper.awid}, session)
     } catch (error) {
       expect(error.status).toEqual(400);
       expect(error.message).toEqual(expectedError.message);
@@ -65,8 +79,7 @@ describe(`Testing  the list/update...`, () => {
     };
     expect.assertions(3);
     try {
-      const list = await TestHelper.executePostCommand("list/create", { name:"name"}, session);
-      await TestHelper.executePostCommand("list/update", {id: list.id, ...dtoIn}, session);
+        await TestHelper.executeGetCommand("item/list", { awid: TestHelper.awid}, session)
     } catch (error) {
       expect(error.status).toEqual(400);
       expect(error.message).toEqual(expectedError.message);
@@ -76,5 +89,4 @@ describe(`Testing  the list/update...`, () => {
       }
     }
   });
-
 });

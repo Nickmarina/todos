@@ -42,10 +42,10 @@ class ListAbl {
     ); 
     
     let uuObject = {...dtoIn, awid}
-    if(!uuObject.pageInfo.pageIndex)uuObject.pageInfo.pageIndex = 0
-    if(!uuObject.pageInfo.pageSize)uuObject.pageInfo.pageSize
-    const pageInfo = {pageIndex: uuObject.pageInfo.pageIndex, pageSize: uuObject.pageInfo.pageSize}
-    if(!uuObject.pageInfo) uuObject.pageInfo = pageInfo
+
+    if(!dtoIn.pageInfo) uuObject.pageInfo ={}
+    if(!uuObject.pageInfo.pageIndex) uuObject.pageInfo.pageIndex= 0
+    if(!uuObject.pageInfo.pageSize) uuObject.pageInfo.pageSize = 1000
  
     // HDS 2
     const  todoInstance = await this.mainDao.getByAwid(uuObject.awid)
@@ -58,12 +58,12 @@ class ListAbl {
     }
 
     // HDS 3
-    const  itemList = await this.dao.list(uuObject.awid, pageInfo)
+    const  itemList = await this.dao.list(uuObject.awid, uuObject.pageInfo)
 
     // HDS 4
     return{
       ...itemList,
-      pageInfo,
+      pageInfo: uuObject.pageInfo,
       uuAppErrorMap
     }
   }

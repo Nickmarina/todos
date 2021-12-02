@@ -1,11 +1,11 @@
 const { TestHelper } = require("uu_appg01_server-test");
 const CMD = "list/create";
-afterAll(async () => {
+afterEach(async () => {
     await TestHelper.dropDatabase();
     await TestHelper.teardown();
 })
 
-beforeAll(async () => {
+beforeEach(async () => {
     await TestHelper.setup();
     await TestHelper.initUuSubAppInstance();
     await TestHelper.createUuAppWorkspace();
@@ -46,26 +46,26 @@ describe("Testing the list/create...", () => {
     }
   });
 
-  // test("TodoInstanceIsNotInProperState", async () => {
-  //   let session = await TestHelper.login("AwidLicenseOwner", false, false);
-  //   let filter = `{awid: "${TestHelper.awid}"}`;
-  //   const params = `{$set: ${JSON.stringify({ state: `test` })}}`;
-  //   await TestHelper.executeDbScript(`db.todoInstance.findOneAndUpdate(${filter}, ${params})`);
-  //   let expectedError = {
-  //     code: `{CMD}todoInstanceIsNotInProperState`,
-  //     message: "The application is not in proper state.",
-  //     paramMap:{awid: TestHelper.awid, expectedState:"active"}
-  //   };
-  //   expect.assertions(2);
-  //   try {
-  //     await TestHelper.executePostCommand("list/create", { name:"new"},session);
-  //   } catch (error) {
-  //     expect(error.status).toEqual(400);
-  //     expect(error.message).toEqual(expectedError.message);
+  test("TodoInstanceIsNotInProperState", async () => {
+    let session = await TestHelper.login("Authorities", false, false);
+    let filter = `{awid: "${TestHelper.awid}"}`;
+    const params = `{$set: ${JSON.stringify({ state: `test` })}}`;
+    await TestHelper.executeDbScript(`db.todoInstance.findOneAndUpdate(${filter}, ${params})`);
+    let expectedError = {
+      code: `{CMD}/todoInstanceIsNotInProperState`,
+      message: "The application is not in proper state.",
+      paramMap:{awid: TestHelper.awid, expectedState:"active", currentState: "test"}
+    };
+    expect.assertions(3);
+    try {
+      await TestHelper.executePostCommand("list/create", { name:"new"},session);
+    } catch (error) {
+      expect(error.status).toEqual(400);
+      expect(error.message).toEqual(expectedError.message);
 
-  //     if(error.paramMap&&expectedError.paramMap){
-  //       expect(error.paramMap).toEqual(expectedError.paramMap);
-  //     }
-  //   }
-  // });
+      if(error.paramMap&&expectedError.paramMap){
+        expect(error.paramMap).toEqual(expectedError.paramMap);
+      }
+    }
+  });
 });

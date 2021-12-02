@@ -1,53 +1,45 @@
 const { TestHelper } = require("uu_appg01_server-test");
-
-const useCase = "list/update";
-
+const CMD = "list/list";
 afterEach(async () => {
-  await TestHelper.dropDatabase();
-  await TestHelper.teardown();
+    await TestHelper.dropDatabase();
+    await TestHelper.teardown();
 })
 
 beforeEach(async () => {
-  await TestHelper.setup();
-  await TestHelper.initUuSubAppInstance();
-  await TestHelper.createUuAppWorkspace();
-  await TestHelper.initUuAppWorkspace({ "uuAppProfileAuthorities": "urn:uu:GGPLUS4U", "code":"123test", "name":"123test" }) 
+    await TestHelper.setup();
+    await TestHelper.initUuSubAppInstance();
+    await TestHelper.createUuAppWorkspace();
+    await TestHelper.initUuAppWorkspace({ "uuAppProfileAuthorities": "urn:uu:GGPLUS4U", "code":"123test", "name":"123test" }) 
 });
 
 
 
-describe(`Testing  the list/update...`, () => {
+describe(`Testing  the list/list...`, () => {
   test("HDS", async () => {
     let session = await TestHelper.login("AwidLicenseOwner", false, false);
-    const dtoIn={
-        name: "updated",
-        description: "updated"
-    }
-    const list = await TestHelper.executePostCommand("list/create", { name:"name"}, session);
-    const result = await TestHelper.executePostCommand("list/update", {id: list.id, ...dtoIn}, session);
+    let result = await TestHelper.executeGetCommand("list/list", { awid: TestHelper.awid}, session)
     expect(result.status).toEqual(200);
     expect(result.data.uuAppErrorMap).toBeDefined();
   });
 
   test("TodoInstanceDoesNotExist", async () => {
     let session = await TestHelper.login("Authorities", false, false);
-    let filter = `{awid: "${TestHelper.awid}"}`;
+    const filter = `{awid: "${TestHelper.awid}"}`;
     const params = `{$set: ${JSON.stringify({ awid: `test` })}}`;
     await TestHelper.executeDbScript(`db.todoInstance.findOneAndUpdate(${filter}, ${params});`);
     let expectedError = {
-      code: `{CMD}/todoInstanceDoesNotExist`,
+      code: `${CMD}/todoInstanceDoesNotExist`,
       message: "TodoInstance does not exist.",
-      paramMap:{awid: TestHelper.awid}
+      paramMap: { awid: TestHelper.awid },
     };
     expect.assertions(3);
     try {
-      const list = await TestHelper.executePostCommand("list/create", { name:"name"}, session);
-      await TestHelper.executePostCommand("list/update", {id: list.id, ...dtoIn}, session);
+        await TestHelper.executeGetCommand("list/list", { awid: TestHelper.awid}, session)
     } catch (error) {
       expect(error.status).toEqual(400);
       expect(error.message).toEqual(expectedError.message);
 
-      if(error.paramMap&&expectedError.paramMap){
+      if (error.paramMap && expectedError.paramMap) {
         expect(error.paramMap).toEqual(expectedError.paramMap);
       }
     }
@@ -65,8 +57,7 @@ describe(`Testing  the list/update...`, () => {
     };
     expect.assertions(3);
     try {
-      const list = await TestHelper.executePostCommand("list/create", { name:"name"}, session);
-      await TestHelper.executePostCommand("list/update", {id: list.id, ...dtoIn}, session);
+        await TestHelper.executeGetCommand("list/list", { awid: TestHelper.awid}, session)
     } catch (error) {
       expect(error.status).toEqual(400);
       expect(error.message).toEqual(expectedError.message);
@@ -76,5 +67,4 @@ describe(`Testing  the list/update...`, () => {
       }
     }
   });
-
 });
