@@ -145,7 +145,13 @@ const Delete = {
       this.message = "The application is not in proper state.";
     }
   },
-
+  ListDoesNotExist: class extends TodosMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}listDoesNotExist`;
+      this.message = "	List with given id does not exist.";
+    }
+  },
   ListContainsActiveItems: class extends TodosMainUseCaseError {
     constructor() {
       super(...arguments);

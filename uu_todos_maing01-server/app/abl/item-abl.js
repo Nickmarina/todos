@@ -25,7 +25,9 @@ const WARNINGS = {
     code: `${Errors.Delete.UC_CODE}	itemDoesNotExist`,
     message: 'Item with given id does not exist.'
   },
-
+  listUnsupportedKeys: {
+    code: `${Errors.List.UC_CODE}unsupportedKeys`,
+  },
 };
 
 class ItemAbl {
@@ -35,6 +37,53 @@ class ItemAbl {
     this.mainDao = DaoFactory.getDao('todoInstance')
     this.listDao = DaoFactory.getDao('list')
     this.dao = DaoFactory.getDao("item");
+  }
+
+  async list(awid, dtoIn, uuAppErrorMap) {
+    // HDS 1
+    const validationResult = this.validator.validate("itemListDtoInType", dtoIn);
+    uuAppErrorMap = ValidationHelper.processValidationResult(
+        dtoIn,
+        validationResult,
+        WARNINGS.listUnsupportedKeys.code,
+        Errors.List.InvalidDtoIn
+       );  
+    
+    let uuObject = {...dtoIn, awid}
+    if(!uuObject.pageIndex) uuObject.pageIndex = 0
+    if(!uuObject.pageSize) uuObject.pageSize = 1000
+
+    // HDS 2
+    const todoInstance = await this.mainDao.getByAwid(uuObject.awid)
+    if(!todoInstance){
+        throw new Errors.List.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid: uuObject.awid})
+    }
+
+    if (todoInstance.state !== 'active') {
+      throw new Errors.List.TodoInstanceIsNotInProperState({uuAppErrorMap},
+        {awid: uuObject.awid, currentState: todoInstance.state, expectedState: "active" })
+    }
+
+    // HDS 3
+
+    let list = null;
+    if(uuObject.listId&&uuObject.state){  
+      list = await this.dao.listByListIdAndState(uuObject.awid, uuObject.listId, uuObject.state, uuObject.pageInfo)
+    }else if(uuObject.state){
+      list = await this.dao.listByState(uuObject.awid, uuObject.state, uuObject.pageInfo) 
+    }else if(uuObject.listId){
+      list = await this.dao.listByListId(uuObject.awid, uuObject.listId, uuObject.pageInfo) 
+    } else {
+      list = await this.dao.list(uuObject.awid, uuObject.pageInfo)
+    }
+
+    // HDS 4
+    
+    return {
+      ...list,
+      pageInfo: uuObject.pageInfo,
+      uuAppErrorMap
+    }
   }
 
   async delete(awid, dtoIn, uuAppErrorMap) {
@@ -160,10 +209,7 @@ class ItemAbl {
     }
 
     // HDS 4
-    const uuList = await this.listDao.get(awid, uuObject.listId)
-    if(!uuList){
-      throw new Errors.Update.ListDoesNotExist({ uuAppErrorMap },{list:uuObject.listId})
-    }
+    
 
     // HDS 5
     let uuItem = null;

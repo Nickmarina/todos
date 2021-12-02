@@ -17,11 +17,7 @@ const WARNINGS = {
   },
   deleteUnsupportedKeys: {
     code: `${Errors.Delete.UC_CODE}unsupportedKeys`,
-  },
-  // listDoesNotExist: {
-  //   code: `${Errors.Update.UC_CODE}unsupportedKeys`,
-
-  // },
+  }
 };
 
 class ListAbl {
@@ -29,9 +25,10 @@ class ListAbl {
     this.validator = Validator.load();
     this.mainDao = DaoFactory.getDao('todoInstance')
     this.dao = DaoFactory.getDao("list");
+    this.itemDao = DaoFactory.getDao("item")
   }
 
-  async delete(awid, dtoIn) {
+  async delete(awid, dtoIn, uuAppErrorMap) {
     // HDS 1
     const validationResult = this.validator.validate("listDeleteDtoInType", dtoIn);
     uuAppErrorMap = ValidationHelper.processValidationResult(
@@ -40,29 +37,49 @@ class ListAbl {
         WARNINGS.deleteUnsupportedKeys.code,
         Errors.Delete.InvalidDtoIn
     ); 
+
+    const uuObject = {awid, ...dtoIn}
+    if(!uuObject.forceDelete) uuObject.forceDelete = false
     
     // HDS 2
-    const uuTodos = await this.mainDao.getByAwid(awid)
-    if(!uuTodos){
-        throw new Errors.Delete.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid})
+    const  todoInstance = await this.mainDao.getByAwid(uuObject.awid)
+    if(!todoInstance){
+        throw new Errors.Delete.TodoInstanceDoesNotExist({uuAppErrorMap}, {awid: uuObject.awid})
     }
 
-    if (uuTodos.state !== 'active') {
+    if ( todoInstance.state !== 'active') {
       throw new Errors.Delete.TodoInstanceIsNotInProperState({uuAppErrorMap},
-         {awid, currentState: uuTodos.state, expectedState: "active" })
+         {awid, currentState:  todoInstance.state, expectedState: "active" })
     }
 
-    // // HDS 3
-    // const uuList = await this.dao.get(awid, dtoIn.id)
-    // if(!uuList){
-    //   ValidationHelper.addWarning(
-    //     uuAppErrorMap,
-    //     WARNINGS.listDoesNotExist.code,
-    //     WARNINGS.listDoesNotExist.message,
-    //     { list: dtoIn.ide }
-    //   );
-    // }
+    // HDS 3
+    const list = await this.dao.get(awid, dtoIn.id)
+    if(!list){
+      throw new Errors.Delete.ListDoesNotExist({uuAppErrorMap}, {id:uuObject.id})
+    }
 
+    // HDS 4 
+    let items = await this.itemDao.listByListId(uuObject.awid ,uuObject.id, 0)
+    console.log(items)
+    if(items.itemList.length>0&&uuObject.forceDelete === false){
+      throw new Errors.Delete.ListContainsActiveItems({uuAppErrorMap}, {id: uuObject.id, itemList: items})
+    }
+    console.log(items)
+
+    // HDS 5
+    if(items) {
+      await items.itemList.map(item => {
+        this.itemDao.delete(uuObject.awid, item.id)
+      })
+    }
+    
+    // HDS 6
+    await this.dao.delete(uuObject.awid, uuObject.id)
+
+    // HDS 7 
+    return {
+      uuAppErrorMap
+    }
   }
 
   async create(awid, dtoIn, uuAppErrorMap) {
