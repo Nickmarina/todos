@@ -38,6 +38,25 @@ let Calls = {
     return await Calls.getWorkspace();
   },
 
+  todosList(dtoInData) {
+    let commandUri = Calls.getCommandUri("list/list");
+    return Calls.call("get", commandUri, dtoInData);
+  },
+  
+  listCreate(dtoInData) {
+    let commandUri = Calls.getCommandUri("list/create");
+    return Calls.call("post", commandUri, dtoInData);
+  },
+
+  listUpdate(dtoInData) {
+    let commandUri = Calls.getCommandUri("list/update");
+    return Calls.call("post", commandUri, dtoInData);
+  },
+  listDelete(dtoInData) {
+    let commandUri = Calls.getCommandUri("list/delete");
+    return Calls.call("post", commandUri, dtoInData);
+  },
+
   /*
   For calling command on specific server, in case of developing client site with already deployed
   server in uuCloud etc. You can specify url of this application (or part of url) in development

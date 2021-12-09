@@ -209,8 +209,12 @@ class ItemAbl {
         {awid, currentState: uuTodo.state, expectedState: "active" })
     }
 
-    // HDS 4
-    
+    // // HDS 4
+    // const uuList = await this.listDao.get(awid, uuObject.listId)
+    // if(!uuList){
+    //   throw new Errors.Update.ListDoesNotExist({ uuAppErrorMap },{list:uuObject.listId})
+    // }
+
 
     // HDS 5
     let uuItem = null;

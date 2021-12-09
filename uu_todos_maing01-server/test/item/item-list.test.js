@@ -43,7 +43,7 @@ describe("Testing the item/list...", () => {
     let result = await TestHelper.executeGetCommand("item/list", { awid: TestHelper.awid, dtoIn:{listId: item.listId}}, session)
     expect(result.status).toEqual(200);
     expect(result.data.uuAppErrorMap).toBeDefined();
-    });
+});
   test("TodoInstanceDoesNotExist", async () => {
     let session = await TestHelper.login("Authorities", false, false);
     let filter = `{awid: "${TestHelper.awid}"}`;

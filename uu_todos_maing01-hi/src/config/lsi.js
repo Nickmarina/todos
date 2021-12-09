@@ -13,6 +13,14 @@ const Lsi = {
       cs: "O aplikaci",
       en: "About Application",
     },
+
+      
+    list: (param)=>{
+      return{
+          "en":`${param}`
+      }
+  },
+
   },
 
   about: {
