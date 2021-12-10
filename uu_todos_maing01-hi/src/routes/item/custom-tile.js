@@ -29,12 +29,9 @@ export const CustomTile = createVisualComponent({
     //@@viewOn:private
     const { data:item, handleUpdateModal} = props;
     const confirm = props.getConfirmRef();
-    console.log(item)
 
     async function handleCompleted(){
       const value = {"state": "completed"}
-
-      console.log(value)
       await item.handlerMap.setFinalState(value)
     }
     //@@viewOff:private

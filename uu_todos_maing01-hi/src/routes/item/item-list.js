@@ -10,7 +10,6 @@ import {useItem} from "./context/use-item.js";
 import {useList} from "../list/context/use-list"
 import CustomTile from "./custom-tile";
 import { useContextModal } from "../list/common/modal-manager.js";
-import {ItemCreateControls, ItemCreateForm, ItemCreateHeader} from "./item-create-form/item-create-form";
 import {ItemUpdateControls, ItemUpdateForm, ItemUpdateHeader} from "./item-update-form/item-update-form"
 
 
@@ -53,12 +52,12 @@ export const ItemList = createVisualComponent({
     });
   }
 
-  function handleCreateModal() {
-    open({
-      header: <ItemCreateHeader/>,
-      content: <ItemCreateForm  handlerMap={handlerMap} closeModal={close} showAlert={showAlert} listId={props.params.listId}/>,
-      footer: <ItemCreateControls isCreateForm={true} />,
-    });
+
+  async function handleCreateNewItem(e){
+    if(e.value.length>0){
+      const value = {"text": e.value, "listId": props.params.listId }
+      await handlerMap.create(value)
+    }
   }
 
    //@@viewOn:render
@@ -69,34 +68,25 @@ export const ItemList = createVisualComponent({
      STATICS
    );
 
-   function handleItemSearch(item, value) {
-    let fragments = value.split(/[\s,.-;:_]/);
-    return fragments.some((frag) => {
-      return item.data.name.toLowerCase().indexOf(frag.toLowerCase()) !== -1;
-    });
-  }
+
   
-  const getActions = () => [
-    {
-      active: true,
-      icon: "mdi-plus-circle",
-      content: "Add new todo",
-      colorSchema: "green",
-      bgStyle: "outline",
-      onClick: handleCreateModal,
-    },
-  ]
+ 
 
    return currentNestingLevel ? (
      <Uu5Tiles.ControllerProvider
        data={data}
      >
 
-       
-       <Uu5Tiles.ActionBar
-         onItemSearch={handleItemSearch}
-         actions={getActions()}
-       />
+      <UU5.Forms.TextButton
+        placeholder='Add a new item'
+        size="l"
+        buttons={[{
+          icon: 'plus4u-task',
+          onClick: (e) => handleCreateNewItem(e),
+          colorSchema: 'info'
+        }]}
+      />
+
        <Uu5Tiles.Grid
         //  tileMinWidth={1000}
         //  tileMaxWidth={1200}
