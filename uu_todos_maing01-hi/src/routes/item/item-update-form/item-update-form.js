@@ -1,18 +1,18 @@
 //@@viewOn:imports
 import UU5 from "uu5g04";
 import { createVisualComponent, useLsiValues, useState  } from "uu5g04-hooks";
-import Lsi from './list-update-form-lsi';
-import Config from "../config/config";
+import Lsi from './item-update-form-lsi';
+import Config from "../../list/config/config";
 //@@viewOff:imports
 
 const STATICS = {
   //@@viewOn:statics
-  displayName: Config.TAG + "ListUpdateForm",
+  displayName: Config.TAG + "ItemUpdateForm",
   nestingLevel: "bigBoxCollection",
   //@@viewOff:statics
 };
 
-const ListUpdateForm = createVisualComponent({
+const ItemUpdateForm = createVisualComponent({
   ...STATICS,
 
   //@@viewOn:propTypes
@@ -24,20 +24,18 @@ const ListUpdateForm = createVisualComponent({
   //@@viewOff:defaultProps
 
   render(props) {
-    const { data } = props;
+    const { data, closeModal, showAlert } = props;
+    console.log(data)
     const [isLoading, setIsLoading]=useState(false)
     // const inputLsi = useLsiValues(Lsi)
 
     async function handleUpdate(formData) {
       const { values, component } = formData;
-      let action;
-
-      isCreateForm ? action = handlerMap.create : action = data?.handlerMap?.update
     
       component.setPending();
 
       try{
-        await action(values);
+        await data.handlerMap.update(values);
         component.getAlertBus().addAlert({
           content: <UU5.Common.Error content={<UU5.Bricks.Lsi lsi={Lsi.saveSuccess} />} />,
           colorSchema: "success",
@@ -75,11 +73,11 @@ const ListUpdateForm = createVisualComponent({
         disabled={isLoading}
       >
         <UU5.Forms.Text 
-        label="Name"
-        name="name"
-        value={data?.name}
+        label="Text"
+        name="text"
+        value={data?.data.text}
         />
-        <UU5.Bricks.Button><UU5.Bricks.Icon icon="plus4u-bin"/></UU5.Bricks.Button>   
+        {/* <UU5.Bricks.Button><UU5.Bricks.Icon icon="plus4u-bin"/></UU5.Bricks.Button>    */}
       </UU5.Forms.ContextForm>
     );
     //@@viewOff:render
@@ -87,7 +85,7 @@ const ListUpdateForm = createVisualComponent({
 });
 
 //viewOn:helpers
-const ListUpdateHeader = () => {
+const ItemUpdateHeader = () => {
   return (
     <UU5.Forms.ContextHeader
       content={<UU5.Bricks.Lsi lsi={Lsi.header} />}
@@ -96,10 +94,10 @@ const ListUpdateHeader = () => {
   );
 };
 
-const ListUpdateControls = ({ isCreateForm }) => {
+const ItemUpdateControls = () => {
   return (
     <UU5.Forms.ContextControls
-      buttonSubmitProps={{ content: <UU5.Bricks.Lsi lsi={isCreateForm ? Lsi.submit("Create") : Lsi.submit("Update")} /> }}
+      buttonSubmitProps={{ content: <UU5.Bricks.Lsi lsi={Lsi.submit("Create")} /> }}
       buttonCancelProps={{ content: <UU5.Bricks.Lsi lsi={Lsi.cancel} /> }}
     />
   );
@@ -107,6 +105,6 @@ const ListUpdateControls = ({ isCreateForm }) => {
 //viewOff:helpers
 
 //viewOn:exports
-export { ListUpdateForm, ListUpdateHeader, ListUpdateControls };
-export default  ListUpdateForm;
+export { ItemUpdateForm, ItemUpdateHeader, ItemUpdateControls };
+export default  ItemUpdateForm;
 //viewOff:exports
