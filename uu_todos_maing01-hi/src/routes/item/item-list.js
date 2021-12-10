@@ -41,11 +41,8 @@ export const ItemList = createVisualComponent({
       handlerMap.load({listId: props.params.listId})
     }, [props.params])
 
-  const {data:list} = useList()
-  console.log(list)
   const [open, close, showAlert, getConfirmRef] = useContextModal()
   const {data, handlerMap} = useItem()   
-  const items = data.map(items => items.data) 
 
   //@@viewOn:private
   function handleUpdateModal(data) {
@@ -94,13 +91,15 @@ export const ItemList = createVisualComponent({
      <Uu5Tiles.ControllerProvider
        data={data}
      >
+
+       
        <Uu5Tiles.ActionBar
          onItemSearch={handleItemSearch}
          actions={getActions()}
        />
        <Uu5Tiles.Grid
-         tileMinWidth={1000}
-         tileMaxWidth={1200}
+        //  tileMinWidth={1000}
+        //  tileMaxWidth={1200}
          tileSpacing={8}
          rowSpacing={8}
        >

@@ -26,22 +26,26 @@ const ListUpdater = createVisualComponent({
   //@@viewOff:defaultProps
 
   render(props) {
-      const {data} = props
+      const {data, setUpdateState} = props
       const [value, setValue]= useState(data.data.name)
 
       async function handleUpdate(){
-        const sendedValue = {name: `${value}`}
-         await data.handlerMap.update(sendedValue)
+        if(value!==data.data.name){
+          const sendedValue = {name: `${value}`}
+          await data.handlerMap.update(sendedValue)
+        }
+         setUpdateState(false)
     }
 
     async function handleDelete(){
-        console.log('Hi')
         await data.handlerMap.delete()
+        setUpdateState(false)
     }
 
     return (
       <div>
-        <UU5.Forms.Text label="Name" name="name" value={value} onChange={(e)=> setValue(e.value)}/>
+         <UU5.Forms.Text label="Name" name="name" value={value} onChange={(e)=> setValue(e.value)}/>
+         {/* <UU5.Forms.Checkbox size="s" label="force delete"/>  */}
          <UU5.Bricks.Button onClick={()=> handleDelete()}><UU5.Bricks.Icon icon="plus4u-bin"/></UU5.Bricks.Button> 
          <UU5.Bricks.Button onClick={()=>handleUpdate()}><UU5.Bricks.Icon icon="plus4u-task"/></UU5.Bricks.Button> 
       </div>

@@ -101,7 +101,6 @@ class ListAbl {
 
     // HDS 4 
     let items = await this.itemDao.listByListId(uuObject.awid ,uuObject.id, 0)
-    // console.log(items)
     if(items.itemList.length>0&&uuObject.forceDelete === false){
       throw new Errors.Delete.ListContainsActiveItems({uuAppErrorMap}, {id: uuObject.id, itemList: items})
     }

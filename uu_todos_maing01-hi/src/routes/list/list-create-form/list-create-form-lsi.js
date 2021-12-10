@@ -1,6 +1,6 @@
 const Lsi = {
     header: {
-      en: "Set State",
+      en: "Create new list",
     },
     info: {
       en:

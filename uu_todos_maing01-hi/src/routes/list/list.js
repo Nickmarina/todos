@@ -10,6 +10,7 @@ import { ListCreateHeader, ListCreateControls, ListCreateForm } from "./list-cre
 import { useContextModal } from "./common/modal-manager";
 import {useList} from "./context/use-list";
 import ListUpdater from "./list-updater.js";
+import OneList from "./one-list.js";
 //@@viewOff:imports
 
 const STATICS = {
@@ -47,10 +48,8 @@ export const List = createVisualComponent({
       });
     }
 
-    function handleUpdate( data, e){
-      console.log(e.props)
+    function handleUpdate( data, ){
       if(data) setUpdate(true)
-    
     }
     
     
@@ -61,11 +60,12 @@ export const List = createVisualComponent({
                 // NOTE Item "id" equals to useCase so that item gets automatically selected when route changes (see spa-autheticated.js).
                 items = {data?.map(list=> (       
                   { id: list?.data.id, href: `list?listId=${list?.data.id}`, content: 
-                   <div>
-                    <UU5.Bricks.Lsi lsi={Lsi.left.list(list?.data.name)} /> 
-                     <UU5.Bricks.Button><UU5.Bricks.Icon icon="plus4u5-pencil"/></UU5.Bricks.Button> 
-                     <ListUpdater data={list}/>
-                  </div>
+                  <OneList list={list}/>
+                  //  <div>
+                  //   <UU5.Bricks.Lsi lsi={Lsi.left.list(list?.data.name)} /> 
+                  //    <UU5.Bricks.Button><UU5.Bricks.Icon icon="plus4u5-pencil"/></UU5.Bricks.Button> 
+                  //    <ListUpdater data={list}/>
+                  // </div>
                 }
                 ))}
                />

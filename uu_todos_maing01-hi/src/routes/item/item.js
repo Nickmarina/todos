@@ -32,7 +32,6 @@ export const Item = createVisualComponent({
   //@@viewOff:defaultProps
 
   render(props) {
-   console.log("props", props);
     
     return (
       <ModalManager>
@@ -43,7 +42,6 @@ export const Item = createVisualComponent({
                        return(
                         <DataListStateResolver dataList={dataListResult}>
                             <ItemList params={props.params}/>
-                           {/* {JSON.stringify(dataListResult)} */}
                         </DataListStateResolver>
                        )
                    }

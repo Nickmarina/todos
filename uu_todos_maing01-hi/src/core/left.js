@@ -64,7 +64,6 @@ export const Left = createVisualComponent({
         }
        </ListContext.Consumer>
       </ListLoader>
-    );
     </Plus4U5.App.Left>
     </ModalManager>
     );

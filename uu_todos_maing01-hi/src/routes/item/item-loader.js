@@ -35,6 +35,7 @@ export const ItemLoader = createComponent({
       itemHandlerMap: {
         update: Calls.itemUpdate,
         delete: Calls.itemDelete,
+        setFinalState: Calls.itemSetFinalState,
       }
     });
     

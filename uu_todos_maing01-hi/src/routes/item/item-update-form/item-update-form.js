@@ -25,7 +25,6 @@ const ItemUpdateForm = createVisualComponent({
 
   render(props) {
     const { data, closeModal, showAlert } = props;
-    console.log(data)
     const [isLoading, setIsLoading]=useState(false)
     // const inputLsi = useLsiValues(Lsi)
 
@@ -97,7 +96,7 @@ const ItemUpdateHeader = () => {
 const ItemUpdateControls = () => {
   return (
     <UU5.Forms.ContextControls
-      buttonSubmitProps={{ content: <UU5.Bricks.Lsi lsi={Lsi.submit("Create")} /> }}
+      buttonSubmitProps={{ content: <UU5.Bricks.Lsi lsi={Lsi.submit("Update")} /> }}
       buttonCancelProps={{ content: <UU5.Bricks.Lsi lsi={Lsi.cancel} /> }}
     />
   );
