@@ -1,32 +1,19 @@
-//@@viewOn:imports
 import UU5 from "uu5g04";
 import { createVisualComponent, useLsiValues, useState  } from "uu5g04-hooks";
 import Lsi from './item-update-form-lsi';
 import Config from "../../list/config/config";
-//@@viewOff:imports
 
 const STATICS = {
-  //@@viewOn:statics
   displayName: Config.TAG + "ItemUpdateForm",
   nestingLevel: "bigBoxCollection",
-  //@@viewOff:statics
 };
 
 const ItemUpdateForm = createVisualComponent({
   ...STATICS,
 
-  //@@viewOn:propTypes
-  propTypes: {},
-  //@@viewOff:propTypes
-
-  //@@viewOn:defaultProps
-  defaultProps: {},
-  //@@viewOff:defaultProps
-
   render(props) {
-    const { data, closeModal, showAlert } = props;
-    const [isLoading, setIsLoading]=useState(false)
-    // const inputLsi = useLsiValues(Lsi)
+    const { data, closeModal } = props;
+    const [isLoading]=useState(false)
 
     async function handleUpdate(formData) {
       const { values, component } = formData;
@@ -50,13 +37,6 @@ const ItemUpdateForm = createVisualComponent({
       component.setReady();
       closeModal();
     }
-    //@@viewOn:private
-    //@@viewOff:private
-
-    //@@viewOn:interface
-    //@@viewOff:interface
-
-    //@@viewOn:render
     const className = Config.Css.css``;
     const attrs = UU5.Common.VisualComponent.getAttrs(props, className);
     const currentNestingLevel = UU5.Utils.NestingLevel.getNestingLevel(
@@ -76,14 +56,10 @@ const ItemUpdateForm = createVisualComponent({
         name="text"
         value={data?.data.text}
         />
-        {/* <UU5.Bricks.Button><UU5.Bricks.Icon icon="plus4u-bin"/></UU5.Bricks.Button>    */}
       </UU5.Forms.ContextForm>
     );
-    //@@viewOff:render
   },
 });
-
-//viewOn:helpers
 const ItemUpdateHeader = () => {
   return (
     <UU5.Forms.ContextHeader
@@ -101,9 +77,5 @@ const ItemUpdateControls = () => {
     />
   );
 };
-//viewOff:helpers
-
-//viewOn:exports
 export { ItemUpdateForm, ItemUpdateHeader, ItemUpdateControls };
 export default  ItemUpdateForm;
-//viewOff:exports

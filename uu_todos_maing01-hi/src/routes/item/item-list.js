@@ -1,7 +1,6 @@
-//@@viewOn:imports
 import UU5 from "uu5g04";
 import "uu5g04-bricks";
-import { createVisualComponent, useState, useEffect} from "uu5g04-hooks";
+import { createVisualComponent, useEffect} from "uu5g04-hooks";
 import "uu_plus4u5g01-bricks";
 import Uu5Tiles from "uu5tilesg02";
 import Config from "./config/config.js";
@@ -11,27 +10,14 @@ import { useContextModal } from "../list/common/modal-manager.js";
 import {ItemUpdateControls, ItemUpdateForm, ItemUpdateHeader} from "./item-update-form/item-update-form"
 
 
-
-//@@viewOff:imports
-
 const STATICS = {
-  //@@viewOn:statics
   displayName: Config.TAG + "ItemList",
-  //@@viewOff:statics
 };
 
-const CLASS_NAMES = {
-
-};
 
 export const ItemList = createVisualComponent({
   ...STATICS,
 
-  //@@viewOn:propTypes
-  //@@viewOff:propTypes
-
-  //@@viewOn:defaultProps
-  //@@viewOff:defaultProps
 
   render(props) {
     const {data, handlerMap} = useItem()   
@@ -41,7 +27,6 @@ export const ItemList = createVisualComponent({
       handlerMap.load({listId: props.params.listId})
     }, [props.params])
 
-  //@@viewOn:private
   function handleUpdateModal(data) {
     open({
       header:<ItemUpdateHeader/>,
@@ -58,17 +43,10 @@ export const ItemList = createVisualComponent({
     }
   }
 
-   //@@viewOn:render
-   const className = Config.Css.css``;
-   const attrs = UU5.Common.VisualComponent.getAttrs(props, className);
    const currentNestingLevel = UU5.Utils.NestingLevel.getNestingLevel(
      props,
      STATICS
    );
-
-
-  
- 
 
    return currentNestingLevel ? (
      <Uu5Tiles.ControllerProvider
@@ -92,7 +70,6 @@ export const ItemList = createVisualComponent({
        </Uu5Tiles.Grid>
      </Uu5Tiles.ControllerProvider>
    ) : null;
-   //@@viewOff:render
  },
 });
 export default ItemList;

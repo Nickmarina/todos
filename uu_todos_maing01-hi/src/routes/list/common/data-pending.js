@@ -1,10 +1,3 @@
-// template: uu5ComponentCore DataPending
-// templateVersion: 0.1.0
-// documentation: TODO
-//@@viewOn:revision
-// coded: Sofiia Franchuk (2734-2114-1), 02.08.2021
-// reviewed:
-//@@viewOff:revision
 
 //@@viewOn:imports
 import UU5 from "uu5g04";

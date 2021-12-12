@@ -10,31 +10,17 @@ import ListLoader from '../routes/list/list-loader';
 import ListContext from "../routes/list/context/list-context";
 import { ModalManager } from "../routes/list/common/modal-manager.js";
 import DataListStateResolver from "../routes/list/common/data-list-state-resolver.js";
-//@@viewOff:imports
 
 const STATICS = {
-  //@@viewOn:static
   displayName: Config.TAG + "Left",
-  //@@viewOff:static
 };
 
 export const Left = createVisualComponent({
   ...STATICS,
 
-  //@@viewOn:propTypes
-  //@@viewOff:propTypes
-
-  //@@viewOn:defaultProps
-  //@@viewOff:defaultProps
 
   render(props) {
-    //@@viewOn:private
-    //@@viewOff:private
 
-    //@@viewOn:interface
-    //@@viewOff:interface
-
-    //@@viewOn:render
     return (
       <ModalManager>
       <Plus4U5.App.Left

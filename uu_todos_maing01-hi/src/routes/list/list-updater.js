@@ -4,25 +4,14 @@ import "uu5g04-bricks";
 import { createVisualComponent, useState} from "uu5g04-hooks";
 import "uu_plus4u5g01-bricks";
 import Config from "./config/config.js";
-import Lsi from "../../config/lsi.js";
 
 const STATICS = {
-  //@@viewOn:statics
   displayName: Config.TAG + "ListUpdater",
-  //@@viewOff:statics
 };
 
-const CLASS_NAMES = {
-
-};
 
 const ListUpdater = createVisualComponent({
   ...STATICS,
-
-  //@@viewOn:propTypes
-  //@@viewOff:propTypes
-  //@@viewOn:defaultProps
-  //@@viewOff:defaultProps
 
   render(props) {
       const {data, setUpdateState, getConfirmRef} = props
@@ -65,7 +54,8 @@ const ListUpdater = createVisualComponent({
     return (
       <div>
          <UU5.Forms.Text name="name" value={value} onChange={(e)=> setValue(e.value)}/>
-         <UU5.Forms.Checkbox size="s" label="delete with all items" value={forceDelete} onChange={()=> handleChangeForceDelete()}/> 
+         <div style={{display: "flex", alignItems: "flex-end", justifyContent:"space-between"}}>
+         <UU5.Forms.Checkbox size="s" label="force delete" value={forceDelete} onChange={()=> handleChangeForceDelete()}/> 
          <UU5.Bricks.Button bgStyle="transparent" onClick={()=>  { 
               return confirm.open({
                 header: <UU5.Bricks.Header level={4} content="Delete this list?" />,
@@ -75,9 +65,10 @@ const ListUpdater = createVisualComponent({
               })
             }}><UU5.Bricks.Icon icon="plus4u-bin"/></UU5.Bricks.Button> 
          <UU5.Bricks.Button onClick={()=>handleUpdate()}><UU5.Bricks.Icon icon="plus4u-task"/></UU5.Bricks.Button> 
+         </div>
+        
       </div>
     );
-    //@@viewOff:render
   },
 });
 

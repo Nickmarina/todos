@@ -18,8 +18,6 @@ const STATICS = {
   displayName: Config.TAG + "SpaAuthenticated",
   //@@viewOff:statics
 };
-
-const About = UU5.Common.Component.lazy(() => import("../routes/about"));
 const InitAppWorkspace = UU5.Common.Component.lazy(() => import("../routes/init-app-workspace"));
 const ControlPanel = UU5.Common.Component.lazy(() => import("../routes/control-panel"));
 
@@ -27,7 +25,6 @@ const DEFAULT_USE_CASE = "home";
 const ROUTES = {
   "": DEFAULT_USE_CASE,
   home: { component: <Home /> },
-  about: { component: <About /> },
   list: {component: <Item/>},
   "sys/uuAppWorkspace/initUve": { component: <InitAppWorkspace /> },
   controlPanel: { component: <ControlPanel /> },

@@ -1,41 +1,27 @@
-//@@viewOn:imports
 import UU5 from "uu5g04";
 import "uu5g04-bricks";
 import { createVisualComponent, useState} from "uu5g04-hooks";
 import Plus4U5 from "uu_plus4u5g01";
 import "uu_plus4u5g01-bricks";
 import Config from "./config/config.js";
-import Lsi from "../../config/lsi.js";
 import { ListCreateHeader, ListCreateControls, ListCreateForm } from "./list-create-form/list-create-form";
 import { useContextModal } from "./common/modal-manager";
 import {useList} from "./context/use-list";
-import ListUpdater from "./list-updater.js";
 import OneList from "./one-list.js";
-//@@viewOff:imports
+
 
 const STATICS = {
-  //@@viewOn:statics
   displayName: Config.TAG + "List",
-  //@@viewOff:statics
-};
-
-const CLASS_NAMES = {
 
 };
+
+
 
 export const List = createVisualComponent({
   ...STATICS,
-
-  //@@viewOn:propTypes
-  //@@viewOff:propTypes
-
-  //@@viewOn:defaultProps
-  //@@viewOff:defaultProps
-
   render(props) {
   const {data, handlerMap} = useList()
-
-    const [open, close, showAlert, getConfirmRef] = useContextModal()
+  const [open, close, showAlert, getConfirmRef] = useContextModal()
 
     function handleCreateList() {
       open({
@@ -58,7 +44,6 @@ export const List = createVisualComponent({
                <UU5.Bricks.Button colorSchema="blue" bgStyle="transparent" content="+ Create list" onClick={()=> handleCreateList()}/>
       </div>
     );
-    //@@viewOff:render
   },
 });
 
