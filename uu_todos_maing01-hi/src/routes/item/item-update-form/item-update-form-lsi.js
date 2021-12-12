@@ -1,6 +1,6 @@
 const Lsi = {
     header: {
-      en: "Set State",
+      en: "Change item text",
     },
     info: {
       en:
@@ -8,7 +8,7 @@ const Lsi = {
     },
     submit: (param)=>{
         return{
-            "en":`Submit ${param}`
+            "en":`${param}`
         }
     },
     cancel: {

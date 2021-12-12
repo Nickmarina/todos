@@ -32,7 +32,7 @@ export const Spa = createVisualComponent({
     //@@viewOn:render
     return (
       <Plus4U5.App.Spa {...props} appName="uuTodos">
-        <SpaAuthenticated />
+        <SpaAuthenticated style={{ backgroundColor: UU5.Environment.colors.blue.c200}} />
       </Plus4U5.App.Spa>
     );
     //@@viewOff:render

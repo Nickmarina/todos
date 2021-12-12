@@ -46,7 +46,11 @@ const ListUpdater = createVisualComponent({
        try {
         await data.handlerMap.delete()
        } catch(e) {
-        alert(e.message)
+        confirm.open({
+          header: <UU5.Bricks.Header level={4} content="Error" />,
+          content: <UU5.Bricks.Text>{e.message}</UU5.Bricks.Text>,
+          on: () =>  confirm.close(),
+        })
        }
       }
      
@@ -62,7 +66,7 @@ const ListUpdater = createVisualComponent({
       <div>
          <UU5.Forms.Text name="name" value={value} onChange={(e)=> setValue(e.value)}/>
          <UU5.Forms.Checkbox size="s" label="delete with all items" value={forceDelete} onChange={()=> handleChangeForceDelete()}/> 
-         <UU5.Bricks.Button onClick={()=>  { 
+         <UU5.Bricks.Button bgStyle="transparent" onClick={()=>  { 
               return confirm.open({
                 header: <UU5.Bricks.Header level={4} content="Delete this list?" />,
                 content: <UU5.Bricks.Div>Do you really want to delete this list?</UU5.Bricks.Div>,

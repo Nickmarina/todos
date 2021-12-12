@@ -34,10 +34,7 @@ export const List = createVisualComponent({
 
   render(props) {
   const {data, handlerMap} = useList()
-  const [update, setUpdate] = useState(false)
 
-      // const [value, setValue]= useState('');
-    // const [upadatedMenu, setUpdatedMenu] = useState('false')
     const [open, close, showAlert, getConfirmRef] = useContextModal()
 
     function handleCreateList() {
@@ -52,14 +49,13 @@ export const List = createVisualComponent({
       <div>
                 <Plus4U5.App.MenuTree
                 borderBottom
-                // NOTE Item "id" equals to useCase so that item gets automatically selected when route changes (see spa-autheticated.js).
                 items = {data?.map(list=> (       
                   { id: list?.data.id, href: `list?listId=${list?.data.id}`, content: 
                     <OneList list={list} getConfirmRef={getConfirmRef}/>
                 }
                 ))}
                />
-               <UU5.Bricks.Button content="Add new list" onClick={()=> handleCreateList()}/>
+               <UU5.Bricks.Button colorSchema="blue" bgStyle="transparent" content="+ Create list" onClick={()=> handleCreateList()}/>
       </div>
     );
     //@@viewOff:render

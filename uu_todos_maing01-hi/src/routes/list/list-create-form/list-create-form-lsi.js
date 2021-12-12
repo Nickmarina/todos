@@ -8,7 +8,7 @@ const Lsi = {
     },
     submit: (param)=>{
         return{
-            "en":`Submit ${param}`
+            "en":`${param}`
         }
     },
     cancel: {

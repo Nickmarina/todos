@@ -20,6 +20,12 @@ const Lsi = {
           "en":`${param}`
       }
   },
+  deleteListError: (param)=>{
+    return{
+        "en":`${param}`
+    }
+},
+
 
   },
 

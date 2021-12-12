@@ -93,7 +93,7 @@ const ListCreateHeader = () => {
 const ListCreateControls = ({ isCreateForm }) => {
   return (
     <UU5.Forms.ContextControls
-      buttonSubmitProps={{ content: <UU5.Bricks.Lsi lsi={isCreateForm ? Lsi.submit("Create") : Lsi.submit("Update")} /> }}
+      buttonSubmitProps={{ content: <UU5.Bricks.Lsi lsi={Lsi.submit("Create")}/> }}
       buttonCancelProps={{ content: <UU5.Bricks.Lsi lsi={Lsi.cancel} /> }}
     />
   );

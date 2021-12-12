@@ -28,8 +28,6 @@ export const Left = createVisualComponent({
   //@@viewOff:defaultProps
 
   render(props) {
-
-    // {data.map(item => list = item )}
     //@@viewOn:private
     //@@viewOff:private
 
@@ -44,11 +42,9 @@ export const Left = createVisualComponent({
               logoProps={{
                 backgroundColor: UU5.Environment.colors.blue.c700,
                 backgroundColorTo: UU5.Environment.colors.blue.c500,
-                title: "uuTodos",
+                title: "uuToDo",
                 companyLogo: Plus4U5.Environment.basePath + "assets/img/unicorn-logo.svg",
-                generation: "1",
               }}
-              // aboutItems={[{ content: <UU5.Bricks.Lsi lsi={Lsi.left.about} />, href: "about" }]}
               helpHref={null}
             >  
         <ListLoader>
