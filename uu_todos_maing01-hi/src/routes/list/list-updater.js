@@ -31,9 +31,15 @@ const ListUpdater = createVisualComponent({
   async function handleDelete(){
       if(forceDelete === true){
         await data.handlerMap.delete({"forceDelete": true})
+        UU5.Environment.setRoute({
+          url: {useCase: "home"}
+        })
       }else{
        try {
         await data.handlerMap.delete()
+        UU5.Environment.setRoute({
+          url: {useCase: "home"}
+        })
        } catch(e) {
         confirm.open({
           header: <UU5.Bricks.Header level={4} content="Error" />,

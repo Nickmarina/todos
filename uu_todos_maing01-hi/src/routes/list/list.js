@@ -32,7 +32,7 @@ export const List = createVisualComponent({
     }
     
     return (
-      <div>
+      <div> 
                 <Plus4U5.App.MenuTree
                 borderBottom
                 items = {data?.map(list=> (       
