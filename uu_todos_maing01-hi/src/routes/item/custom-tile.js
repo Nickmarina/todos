@@ -40,7 +40,7 @@ export const CustomTile = createVisualComponent({
                  <div style={{ display: "flex", alignItems: "baseline"}}>
                   <UU5.Forms.Checkbox 
                   size="m"
-                  value={item.data.state === "completed"? true : false}
+                  value={item?.data?.state === "completed"}
                   onChange={()=> handleCompleted()}
                   /> 
                   <UU5.Bricks.Text content={item?.data?.text}/>
@@ -65,7 +65,7 @@ export const CustomTile = createVisualComponent({
               <UU5.Bricks.Div style={{ backgroundColor: UU5.Environment.colors.grey.c100, display: "flex", alignItems: "baseline"}} > 
                 <UU5.Forms.Checkbox disabled
                 size="m"
-                value={item.data.state === "completed"? true : false}
+                value={item?.data?.state === "completed"}
                 onChange={()=> handleCompleted()}
                 /> 
                 <UU5.Bricks.Text disabled content={item?.data?.text}/>

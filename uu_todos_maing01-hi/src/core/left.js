@@ -49,7 +49,6 @@ export const Left = createVisualComponent({
     </Plus4U5.App.Left>
     </ModalManager>
     );
-    //@@viewOff:render
   },
 });
 
